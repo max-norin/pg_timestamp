@@ -63,7 +63,12 @@ CREATE TABLE "user"
 
 For the security of timestamp data, I suggest creating two roles: administrator and user.
 The user will not be able to edit timestamps.
-Timestamps will only be assigned in the trigger function.
+This will show that the user does not have permission to edit them.
+Timestamps will only be assigned in the trigger function after inserting or updating a record,
+so you can only edit
+if you are assigning a trigger after the timestamp trigger,
+or accidentally not assign the trigger, or disable the trigger.
+Roles will protect data from such cases.
 
 To implement this approach, trigger function run on behalf of the function creator.
 This poses a data security risk,
