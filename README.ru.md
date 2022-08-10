@@ -23,6 +23,8 @@ CREATE EXTENSION "pg_timestamp"
     VERSION '1.0';
 ```
 
+[Подробнее про расширение и файл control](https://postgrespro.ru/docs/postgresql/14/extend-extensions)
+
 ### Использование
 
 Расширение имеет две родительские таблицы `"timestamp"` и `"timestamp_del"`.

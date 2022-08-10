@@ -26,6 +26,8 @@ CREATE EXTENSION "pg_timestamp"
     VERSION '1.0';
 ```
 
+[More about the extension and the control file](https://www.postgresql.org/docs/current/extend-extensions.html)
+
 ### Usage
 
 The extension has two parent tables`"timestamp"` and `"timestamp_del"`.
