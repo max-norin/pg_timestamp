@@ -2,9 +2,9 @@ CREATE FUNCTION event_trigger_add_triggers_from_timestamp_parent_tables ()
     RETURNS EVENT_TRIGGER
     AS $$
 DECLARE
-    "parents" CONSTANT     REGCLASS[] = ARRAY ['"timestamp"'::REGCLASS, '"timestamp_del"'::REGCLASS];
+    "parents"              REGCLASS[];
     "tg_relid"             OID;
-    "has_timestamp_parent" BOOLEAN    = FALSE;
+    "has_timestamp_parent" BOOLEAN = FALSE;
     "obj"                  RECORD;
 BEGIN
     FOR "obj" IN
@@ -20,6 +20,7 @@ BEGIN
             IF "obj".in_extension = TRUE THEN
                 CONTINUE;
             END IF;
+            "parents" = ARRAY ['@extschema@."timestamp"'::REGCLASS, '@extschema@."timestamp_del"'::REGCLASS];
             IF "obj".command_tag = 'CREATE TABLE' THEN
                 "tg_relid" = "obj".objid;
                 RAISE DEBUG USING MESSAGE = (concat('command_tag: CREATE TABLE ', "obj".object_identity));
@@ -41,7 +42,7 @@ BEGIN
                             BEFORE INSERT OR UPDATE
                             ON %s
                             FOR EACH ROW
-                        EXECUTE FUNCTION trigger_timestamp();', "tg_relid"::REGCLASS);
+                        EXECUTE FUNCTION @extschema@.trigger_timestamp();', "tg_relid"::REGCLASS);
                 END IF;
             END IF;
         END LOOP;

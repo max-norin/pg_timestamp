@@ -9,4 +9,4 @@ CREATE TRIGGER "timestamp"
     BEFORE INSERT OR UPDATE
     ON "timestamp"
     FOR EACH ROW
-EXECUTE FUNCTION trigger_timestamp();
+EXECUTE FUNCTION @extschema@.trigger_timestamp();
