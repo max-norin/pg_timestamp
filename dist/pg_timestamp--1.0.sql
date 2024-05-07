@@ -1,7 +1,7 @@
 /*
 =================== TIMESTAMP ===================
 */
-CREATE FUNCTION trigger_timestamp() RETURNS TRIGGER AS
+CREATE FUNCTION @extschema@.trigger_timestamp() RETURNS TRIGGER AS
 $$
 BEGIN
     NEW."updated_at" = NOW();
@@ -15,30 +15,30 @@ SECURITY DEFINER;
 /*
 =================== TIMESTAMP ===================
 */
-CREATE TABLE "timestamp"
+CREATE TABLE @extschema@."timestamp"
 (
     "created_at" TIMESTAMP NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMP NOT NULL DEFAULT NOW()
 );
-CREATE RULE "timestamp__insert" AS ON INSERT TO "timestamp" DO INSTEAD NOTHING;
+CREATE RULE "timestamp__insert" AS ON INSERT TO @extschema@."timestamp" DO INSTEAD NOTHING;
 
 CREATE TRIGGER "timestamp"
     BEFORE INSERT OR UPDATE
-    ON "timestamp"
+    ON @extschema@."timestamp"
     FOR EACH ROW
 EXECUTE FUNCTION @extschema@.trigger_timestamp();
 /*
 =================== TIMESTAMP_DEL ===================
 */
-CREATE TABLE "timestamp_del"
+CREATE TABLE @extschema@."timestamp_del"
 (
     "deleted_at" TIMESTAMP
 ) INHERITS (@extschema@."timestamp");
-CREATE RULE "timestamp_del__insert" AS ON INSERT TO "timestamp_del" DO INSTEAD NOTHING;
+CREATE RULE "timestamp_del__insert" AS ON INSERT TO @extschema@."timestamp_del" DO INSTEAD NOTHING;
 
 CREATE TRIGGER "timestamp"
     BEFORE INSERT OR UPDATE
-    ON "timestamp_del"
+    ON @extschema@."timestamp_del"
     FOR EACH ROW
 EXECUTE FUNCTION @extschema@.trigger_timestamp();
 /*
