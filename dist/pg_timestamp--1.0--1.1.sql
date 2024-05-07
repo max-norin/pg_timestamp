@@ -1,8 +1,8 @@
 /*
 =================== TIMESTAMP ===================
 */
-CREATE RULE "timestamp_del__update" AS ON UPDATE TO @extschema@."timestamp" DO INSTEAD NOTHING;
-CREATE RULE "timestamp_del__delete" AS ON DELETE TO @extschema@."timestamp" DO INSTEAD NOTHING;
+CREATE RULE "timestamp__update" AS ON UPDATE TO @extschema@."timestamp" DO INSTEAD NOTHING;
+CREATE RULE "timestamp__delete" AS ON DELETE TO @extschema@."timestamp" DO INSTEAD NOTHING;
 /*
 =================== TIMESTAMP_DEL ===================
 */
