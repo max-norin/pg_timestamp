@@ -20,7 +20,7 @@ ALTER ROLE "postgres" SET search_path TO "public", "abstract";
 ```postgresql
 CREATE EXTENSION "pg_timestamp"
     SCHEMA "abstract"
-    VERSION '1.0';
+    VERSION '1.1';
 ```
 
 [Подробнее про расширение и файл control](https://postgrespro.ru/docs/postgresql/14/extend-extensions)
