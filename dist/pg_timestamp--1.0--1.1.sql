@@ -2,14 +2,14 @@
 =================== TIMESTAMP ===================
 */
 DROP TRIGGER "timestamp" ON @extschema@."timestamp";
-CREATE RULE "timestamp__update" AS ON UPDATE TO @extschema@."timestamp" DO INSTEAD NOTHING;
-CREATE RULE "timestamp__delete" AS ON DELETE TO @extschema@."timestamp" DO INSTEAD NOTHING;
+CREATE RULE "update" AS ON UPDATE TO @extschema@."timestamp" DO INSTEAD NOTHING;
+CREATE RULE "delete" AS ON DELETE TO @extschema@."timestamp" DO INSTEAD NOTHING;
 /*
 =================== TIMESTAMP_DEL ===================
 */
 DROP TRIGGER "timestamp" ON @extschema@."timestamp_del";
-CREATE RULE "timestamp_del__update" AS ON UPDATE TO @extschema@."timestamp_del" DO INSTEAD NOTHING;
-CREATE RULE "timestamp_del__delete" AS ON DELETE TO @extschema@."timestamp_del" DO INSTEAD NOTHING;
+CREATE RULE "update" AS ON UPDATE TO @extschema@."timestamp_del" DO INSTEAD NOTHING;
+CREATE RULE "delete" AS ON DELETE TO @extschema@."timestamp_del" DO INSTEAD NOTHING;
 /*
 =================== ADD_TRIGGERS_FROM_TIMESTAMP_PARENT_TABLES ===================
 */

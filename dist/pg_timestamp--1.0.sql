@@ -20,7 +20,7 @@ CREATE TABLE @extschema@."timestamp"
     "created_at" TIMESTAMP NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMP NOT NULL DEFAULT NOW()
 );
-CREATE RULE "timestamp__insert" AS ON INSERT TO @extschema@."timestamp" DO INSTEAD NOTHING;
+CREATE RULE "insert" AS ON INSERT TO @extschema@."timestamp" DO INSTEAD NOTHING;
 
 CREATE TRIGGER "timestamp"
     BEFORE INSERT OR UPDATE
@@ -34,7 +34,7 @@ CREATE TABLE @extschema@."timestamp_del"
 (
     "deleted_at" TIMESTAMP
 ) INHERITS (@extschema@."timestamp");
-CREATE RULE "timestamp_del__insert" AS ON INSERT TO @extschema@."timestamp_del" DO INSTEAD NOTHING;
+CREATE RULE "insert" AS ON INSERT TO @extschema@."timestamp_del" DO INSTEAD NOTHING;
 
 CREATE TRIGGER "timestamp"
     BEFORE INSERT OR UPDATE
