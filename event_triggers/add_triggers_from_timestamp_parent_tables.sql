@@ -5,7 +5,6 @@ CREATE FUNCTION event_trigger_add_triggers_from_timestamp_parent_tables ()
     AS $$
 DECLARE
     "parents"              REGCLASS[];
-    "tg_relid"             OID;
     "has_timestamp_parent" BOOLEAN = FALSE;
     "obj"                  RECORD;
 BEGIN
@@ -29,7 +28,6 @@ BEGIN
             "parents" = ARRAY ['@extschema@."timestamp"'::REGCLASS, '@extschema@."timestamp_del"'::REGCLASS];
             -- если создается таблица
             IF "obj".command_tag = 'CREATE TABLE' THEN
-                "tg_relid" = "obj".objid;
                 RAISE DEBUG USING MESSAGE = (concat('command_tag: CREATE TABLE ', "obj".object_identity));
                 -- получение значение True, если текущая обрабатываемая таблица
                 -- имеет наследование к таблицам timestamp или timestamp_del
@@ -38,12 +36,10 @@ BEGIN
                         -- запрос на получение информации из таблицы наследований,
                         -- где inhrelid равен текущей обрабатываемой таблице
                         -- и inhparent равен таблице timestamp или timestamp_del
-                        SELECT p.oid
+                        SELECT inhrelid
                         FROM pg_inherits
-                            JOIN pg_class AS c ON (inhrelid = c.oid)
-                            JOIN pg_class AS p ON (inhparent = p.oid)
-                        WHERE c.oid = "tg_relid"
-                            AND p.oid = ANY ("parents")
+                        WHERE inhrelid = "obj".objid
+                            AND inhparent = ANY ("parents")
                         )
                 );
                 -- если таблица создана с использованием наследования к таблицам timestamp или timestamp_del
@@ -53,7 +49,7 @@ BEGIN
                             BEFORE INSERT OR UPDATE
                             ON %s
                             FOR EACH ROW
-                        EXECUTE FUNCTION @extschema@.trigger_timestamp();', "tg_relid"::REGCLASS);
+                        EXECUTE FUNCTION @extschema@.trigger_timestamp();', "obj".objid::REGCLASS);
                 END IF;
             END IF;
         END LOOP;

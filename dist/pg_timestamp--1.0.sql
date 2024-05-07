@@ -1,5 +1,5 @@
 /*
-=================== TIMESTAMP =================== 
+=================== TIMESTAMP ===================
 */
 CREATE FUNCTION trigger_timestamp() RETURNS TRIGGER AS
 $$
@@ -13,7 +13,7 @@ $$ LANGUAGE plpgsql
 VOLATILE
 SECURITY DEFINER;
 /*
-=================== TIMESTAMP =================== 
+=================== TIMESTAMP ===================
 */
 CREATE TABLE "timestamp"
 (
@@ -28,7 +28,7 @@ CREATE TRIGGER "timestamp"
     FOR EACH ROW
 EXECUTE FUNCTION @extschema@.trigger_timestamp();
 /*
-=================== TIMESTAMP_DEL =================== 
+=================== TIMESTAMP_DEL ===================
 */
 CREATE TABLE "timestamp_del"
 (
@@ -42,7 +42,7 @@ CREATE TRIGGER "timestamp"
     FOR EACH ROW
 EXECUTE FUNCTION @extschema@.trigger_timestamp();
 /*
-=================== ADD_TRIGGERS_FROM_TIMESTAMP_PARENT_TABLES =================== 
+=================== ADD_TRIGGERS_FROM_TIMESTAMP_PARENT_TABLES ===================
 */
 CREATE FUNCTION event_trigger_add_triggers_from_timestamp_parent_tables ()
     RETURNS EVENT_TRIGGER
@@ -98,7 +98,7 @@ LANGUAGE plpgsql
 VOLATILE;
 
 /*
-=================== INIT =================== 
+=================== INIT ===================
 */
 -- Chapter 40. Event Triggers - https://postgresql.org/docs/current/event-triggers.html
 -- Event Trigger Functions - https://postgresql.org/docs/current/functions-event-triggers.html
