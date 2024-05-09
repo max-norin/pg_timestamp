@@ -56,5 +56,5 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql
-VOLATILE;
+VOLATILE; -- может делать всё, что угодно, в том числе, модифицировать базу данных
 

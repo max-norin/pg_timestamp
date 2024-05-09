@@ -9,5 +9,5 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql
-VOLATILE
-SECURITY DEFINER;
+VOLATILE -- может делать всё, что угодно, в том числе, модифицировать базу данных
+SECURITY DEFINER; -- функция выполняется с правами пользователя, владеющего ей
