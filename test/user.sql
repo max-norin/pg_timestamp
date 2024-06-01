@@ -1,8 +1,7 @@
-CREATE TABLE "user" (
-                        "id" SERIAL PRIMARY KEY,
-                        "nickname" VARCHAR(100) NOT NULL UNIQUE
+CREATE TABLE public."user"
+(
+    "id"       SERIAL PRIMARY KEY,
+    "nickname" VARCHAR(100) NOT NULL UNIQUE
 )
-    INHERITS (
-              "timestamp_del"
-        );
+    INHERITS (public."timestamp_del");
 
