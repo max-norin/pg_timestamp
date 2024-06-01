@@ -121,18 +121,3 @@ VALUES (DEFAULT, 'max', DEFAULT);
 INSERT INTO "user" (id, nickname)
 VALUES (DEFAULT, 'max');
 ```
-
-## Файлы
-
-- `tables/*.sql` определение родительских таблиц `"timestamp"` `"timestamp_del"`
-- [triggers/timestamp.sql](./triggers/timestamp.sql) триггер для родительских таблиц
-- [event_triggers/add_triggers_from_timestamp_parent_tables.sql](./event_triggers/add_triggers_from_timestamp_parent_tables.sql)
-  функция событийного триггер
-- [init.sql](./init.sql) назначение событийного триггера
-- [test/*.sql](./test) тестовые файлы
-
-## Полезное
-
-- [Pseudotypes](https://www.postgresql.org/docs/current/datatype-pseudo.html)
-- [Functions with Variable Numbers of Arguments](https://www.postgresql.org/docs/current/xfunc-sql.html#XFUNC-SQL-VARIADIC-FUNCTIONS)
-- [Object Identifier Types](https://www.postgresql.org/docs/current/datatype-oid.html#DATATYPE-OID-TABLE)

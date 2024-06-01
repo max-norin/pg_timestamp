@@ -121,12 +121,3 @@ Let's try to insert without `"created_at"` column get success.
 INSERT INTO "user" (id, nickname)
 VALUES (DEFAULT, 'max');
 ```
-
-## Files
-
-- `tables/*.sql` definition parent tables `"timestamp"` `"timestamp_del"`
-- [triggers/timestamp.sql](./triggers/timestamp.sql) parent table trigger
-- [event_triggers/add_triggers_from_timestamp_parent_tables.sql](./event_triggers/add_triggers_from_timestamp_parent_tables.sql)
-  event trigger function
-- [init.sql](./init.sql) definition event trigger
-- [test/*.sql](./test) test files
