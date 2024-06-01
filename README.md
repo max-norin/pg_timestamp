@@ -23,7 +23,7 @@ Install the extension.
 ```postgresql
 CREATE EXTENSION "pg_timestamp"
     SCHEMA "abstract"
-    VERSION '1.1';
+    VERSION '2.0';
 ```
 
 [More about the extension and the control file](https://www.postgresql.org/docs/current/extend-extensions.html)
