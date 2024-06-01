@@ -1,4 +1,4 @@
 comment = 'abstract timestamp tables for inherits'
-default_version = '1.1'
+default_version = '2.0'
 module_pathname = '$libdir/pg_timestamp'
 relocatable = false
