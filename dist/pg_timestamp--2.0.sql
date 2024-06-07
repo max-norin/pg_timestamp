@@ -10,8 +10,8 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql
-    VOLATILE
-    SECURITY DEFINER;
+VOLATILE
+SECURITY DEFINER;
 /*
 =================== TIMESTAMP ===================
 */
