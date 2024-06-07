@@ -1,67 +1,102 @@
 # pg_timestamp
 
-> The extension allows you to create tables with timestamp using inheritance.
+100% works on PostgreSQL version 16, I didn't check the rest.
+If you have any information that works on earlier versions, please let me know.
+
+> An extension for PostgreSQL that allows you to create tables
+> with timestamps (created_at, updated_at, deleted_at) using table inheritance.
+
+Note: when deleting inheritance by the command
+`ALTER TABLE public.new_users NO INHERIT public.users;`,
+no additional actions will occur. The table will have
+the same columns, constraints, and triggers as in inheritance.
+Including automatically inherited `CHECK` and `NOT NULL` constraints.
 
 [README in Russian](./README.ru.md)
 
-## Getting Started
+# Installation
 
-### Install
+For version 2.0 to work, you will need to add
+[pg_full_inherit](https://github.com/max-norin/pg_full_inherit) extension
+to a PostgreSQL application.
+This extension allows you to do full table inheritance, i
+ncluding automatic inheritance of triggers, which is necessary
+and mandatory for the current extension to work.
+In earlier versions we used our own method for automatically adding
+triggers to inherited tables.
 
-Download the files from [dist](./dist) to your `extension` folder PostgreSQL and run the following
-commands.
+## Classic
+
+Download `pg_timestamp--2.0.sql` and `pg_timestamp.control` files
+from [dist](./dist) and move them to the `extension`
+folder of the PostgreSQL application.
+For windows, the folder can be located in
+`C:\Program Files\PostgreSQL\16\share\extension`.
+Next, run the following commands.
 
 Create a new schema for convenience.
 
-```postgresql
+```sql
 CREATE SCHEMA "abstract";
 ALTER ROLE "postgres" SET search_path TO "public", "abstract";
 ```
 
 Install the extension.
 
-```postgresql
+```sql
 CREATE EXTENSION "pg_timestamp"
     SCHEMA "abstract"
     VERSION '2.0';
 ```
 
-[More about the extension and the control file](https://www.postgresql.org/docs/current/extend-extensions.html)
+[Learn more about an extension and control file](https://www.sql.org/docs/current/extend-extensions.html)
 
-### Usage
+## Workaround
+
+If you can't add the extension to PostgreSQL, then there is another option.
+Copy the contents of `pg_timestamp--2.0.sql` file from [dist](./dist) to a text editor.
+Replace the expression `@extschema@` with a schema
+to which the necessary functions will be added, for example `abstract`.
+Copy it to the PostgreSQL console and run it.
+
+# Usage
 
 The extension has two parent tables`"timestamp"` and `"timestamp_del"`.
 
-#### `"timestamp"` table
+## `"timestamp"` table
 
-The `"timestamp"` table has `"created_at"`, `"updated_at"` columns + a trigger that updates these
-columns.
-You can create a new table as follows.
+The `"timestamp"` table has `"created_at"`, `"updated_at"` columns and a trigger
+that updates these columns.
+You can create a new child table as follows.
 
-```postgresql
+```sql
 CREATE TABLE "user"
 (
     "id"       SERIAL PRIMARY KEY,
     "nickname" VARCHAR(100) NOT NULL UNIQUE
-) INHERITS ("timestamp");
+) INHERITS ("abstract"."timestamp");
 ```
 
-The event trigger knows that the table is being created with the `"timestamp"` parent table and will
-automatically add the trigger.
+Event trigger from
+[pg_full_inherit](https://github.com/max-norin/pg_full_inherit) extension
+will recognize that a table is being created
+that inherits from the `"timestamp"` table and
+will automatically add a trigger.
 
-#### `"timestamp_del"` table
+## `"timestamp_del"` table
 
-The table `"timestamp_del"` in addition to the above has `"deleted_at"` column.
+The table `"timestamp_del"` in addition to `"timestamp"` table has `"deleted_at"` column.
+You can create a new child table as follows.
 
-```postgresql
+```sql
 CREATE TABLE "user"
 (
     "id"       SERIAL PRIMARY KEY,
     "nickname" VARCHAR(100) NOT NULL UNIQUE
-) INHERITS ("timestamp_del");
+) INHERITS ("abstract"."timestamp_del");
 ```
 
-## Recommended use
+# Recommended use
 
 For the security of timestamp data, I suggest creating two roles: administrator and user.
 The user will not be able to edit timestamps.
@@ -76,14 +111,14 @@ To implement this approach, trigger function run on behalf of the function creat
 This poses a data security risk,
 to prevent anyone else from using this function, we will block access to it.
 
-```postgresql
+```sql
 -- prevents everyone from executing the trigger_timestamp function
 REVOKE ALL ON ROUTINE trigger_timestamp() FROM PUBLIC;
 -- allows the administrator to execute the trigger_timestamp function
 GRANT ALL ON ROUTINE trigger_timestamp() TO "postgres";
 ```
 
-```postgresql
+```sql
 -- user table with timestamps
 CREATE TABLE "user"
 (
@@ -94,7 +129,7 @@ CREATE TABLE "user"
 
 Create a user and limit his rights.
 
-```postgresql
+```sql
 CREATE ROLE "test_timestamp" LOGIN;
 GRANT CONNECT ON DATABASE "postgres" TO "test_timestamp";
 -- give access rights to the user
@@ -104,20 +139,20 @@ GRANT INSERT ("id", "nickname"), UPDATE ("id", "nickname"), SELECT ON TABLE "use
 
 Change current user to new user or connect to database using new user.
 
-```postgresql
+```sql
 SET ROLE "test_timestamp";
 ```
 
 Let's try to insert with `"created_at"` column get error.
 
-```postgresql
+```sql
 INSERT INTO "user" (id, nickname, created_at)
 VALUES (DEFAULT, 'max', DEFAULT);      
 ```
 
 Let's try to insert without `"created_at"` column get success.
 
-```postgresql
+```sql
 INSERT INTO "user" (id, nickname)
 VALUES (DEFAULT, 'max');
 ```
